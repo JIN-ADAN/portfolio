@@ -1,0 +1,6 @@
+# 사이트에 필요 없는 작업 파일은 올리지 않는다
+.verify/
+_archive/
+tools/
+BUILD_LOG.md
+*.pdf

@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ko" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Donghyun Lim — Portfolio</title>
+<meta name="description" content="임동현의 스크롤리텔링 자기소개서. Craft × AI.">
+<meta name="theme-color" content="#F4F8FC">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Donghyun Lim — Portfolio">
+<meta property="og:description" content="임동현의 스크롤리텔링 자기소개서.">
+<meta property="og:image" content="assets/img/study-notes.jpg">
+<!-- 파비콘: 별도 파일 없이 인라인 SVG (D 이니셜) -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232B68AE'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-size='38' font-style='italic' text-anchor='middle' fill='%23fff'%3ED%3C/text%3E%3C/svg%3E">
+
+<!-- 안전장치: JS가 켜져 있을 때만 숨김 애니메이션 적용, 2.5초 안에 초기화가 안 끝나면 전부 강제 표시 -->
+<script>
+(function () {
+  var d = document.documentElement;
+  d.classList.remove('no-js');
+  d.classList.add('js', 'at-hero');
+  setTimeout(function () { if (!window.__portfolioReady) d.classList.add('force-visible'); }, 2500);
+})();
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Allura&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/sections.css">
+
+<!-- Tailwind Play CDN은 S3에서 제거: 유틸리티를 한 곳도 쓰지 않았고, 런타임 컴파일러가 DOM 변경마다 재실행되어 스크롤 성능에 부담 -->
+</head>
+<body>
+  <a class="skip-link" href="#main">본문으로 건너뛰기</a>
+
+  <div class="progress" aria-hidden="true"><span class="progress__bar" id="progress-bar"></span></div>
+  <div class="spotlight" aria-hidden="true"></div>
+
+  <!-- 히어로 풀블리드 배경 (S2에서 채움) -->
+  <div class="hero-bg" id="hero-bg" data-mount="hero-bg" aria-hidden="true"></div>
+
+  <!-- 모바일 상단바 (≤768px) -->
+  <header class="topbar" id="topbar">
+    <a class="topbar__name" href="#hero"></a>
+    <nav class="topbar__nav" aria-label="섹션 이동"></nav>
+  </header>
+
+  <div class="layout">
+    <!-- 좌측 고정 사이드바 (>768px) -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar__identity">
+        <a class="sidebar__name" href="#hero"></a>
+        <p class="sidebar__roles"></p>
+        <p class="sidebar__tagline"></p>
+      </div>
+      <nav class="sidebar__nav" aria-label="섹션 이동"><ul></ul></nav>
+      <ul class="sidebar__social"></ul>
+    </aside>
+
+    <!-- 우측 스크롤 콘텐츠: data-mount = 섹션 렌더러 id, data-spy = 스크롤스파이 대상 -->
+    <main class="content" id="main">
+      <section class="section section--hero" id="hero" data-spy data-mount="hero"></section>
+      <section class="section" id="about" data-spy data-mount="about"></section>
+      <section class="section" id="work" data-spy data-mount="work"></section>
+      <section class="section section--interlude" id="interlude" data-mount="interlude"></section>
+      <section class="section" id="archive" data-spy data-mount="archive"></section>
+      <section class="section" id="stack" data-spy data-mount="stack"></section>
+      <section class="section" id="contact" data-spy data-mount="contact"></section>
+      <footer class="footer" data-mount="footer"></footer>
+    </main>
+  </div>
+
+  <noscript>
+    <p class="noscript">이 페이지는 JavaScript가 필요합니다.
+      <a href="https://www.instagram.com/hyuns_lim/">Instagram</a> ·
+      <a href="https://www.linkedin.com/in/donghyunlim03/">LinkedIn</a> ·
+      <a href="mailto:031205ldh@gmail.com">Email</a></p>
+  </noscript>
+
+  <!-- CDN (고정 버전) -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script defer src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
+  <script defer src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+
+  <!-- 앱: data → main → sections/* 순서 유지. file:// 에서도 열리도록 ES module 대신 일반 스크립트 사용 -->
+  <script defer src="js/data.js"></script>
+  <script defer src="js/main.js"></script>
+  <script defer src="js/sections/hero.js"></script>
+  <script defer src="js/sections/about.js"></script>
+  <script defer src="js/sections/work.js"></script>
+  <script defer src="js/sections/archive.js"></script>
+  <script defer src="js/sections/stack.js"></script>
+  <script defer src="js/sections/contact.js"></script>
+</body>
+</html>

@@ -1,0 +1,180 @@
+/* ============================================================
+   base.css — 리셋 · 레이아웃 · 사이드바 · 상단바 · 공통 유틸 (S1)
+   색·크기는 tokens.css의 var()만 사용.
+   ============================================================ */
+
+/* ---------- Reset ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+/* 주의: html에 scroll-behavior: smooth를 걸지 말 것.
+   ScrollTrigger가 refresh 때 그 값을 html 인라인 스타일로 되돌려 놓아 Lenis의 매 프레임 스크롤 지정이
+   전부 '부드러운 이동'으로 바뀌고, 화면이 입력을 따라오지 못한다(고주사율 모니터에서는 거의 멈춤).
+   앵커 이동의 부드러움은 Lenis / window.scrollTo({behavior})가 담당한다. */
+html { -webkit-text-size-adjust: 100%; scroll-behavior: auto; }
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-stopped { overflow: hidden; }
+body, h1, h2, h3, h4, p, ul, ol, figure, blockquote { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+img, video, svg { display: block; max-width: 100%; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+
+body {
+  background: var(--c-bg);
+  color: var(--c-text);
+  font-family: var(--f-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+  word-break: keep-all;          /* 한글 단어 중간 줄바꿈 방지 */
+  overflow-wrap: anywhere;
+}
+::selection { background: var(--c-gold); color: var(--c-bg); }
+
+:focus-visible { outline: 2px solid var(--c-gold); outline-offset: 4px; border-radius: var(--r-sm); }
+[tabindex="-1"]:focus { outline: none; }
+
+/* ---------- Utilities ---------- */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+html.no-icons .sr-only--icon-label { position: static; width: auto; height: auto; margin: 0; clip: auto; font-size: var(--fs-sm); }
+
+.skip-link {
+  position: fixed; top: var(--sp-3); left: var(--sp-3); z-index: 100;
+  padding: var(--sp-2) var(--sp-4); border-radius: var(--r-sm);
+  background: var(--c-gold); color: var(--c-bg); font-weight: 600;
+  transform: translateY(-200%);
+}
+.skip-link:focus { transform: none; }
+
+.eyebrow {
+  font-size: var(--fs-xs); font-weight: 600; letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase; color: var(--c-gold);
+}
+
+.noscript { padding: var(--sp-8) var(--page-pad); color: var(--c-text-muted); }
+.noscript a { color: var(--c-gold); text-decoration: underline; }
+
+/* ---------- Reveal (공통 등장 애니메이션) ----------
+   .js 일 때만 숨김 → JS 실패/지연 시에도 콘텐츠가 보인다. */
+.js [data-reveal] {
+  opacity: 0; transform: translateY(18px);
+  transition: opacity var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-out);
+  transition-delay: var(--reveal-delay, 0s);
+}
+.js [data-reveal].is-in,
+.force-visible [data-reveal] { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .js [data-reveal] { opacity: 1; transform: none; transition: none; }
+}
+
+/* ---------- Progress bar ---------- */
+.progress { position: fixed; inset: 0 0 auto 0; height: 2px; z-index: var(--z-overlay); pointer-events: none; }
+.progress__bar { display: block; height: 100%; background: var(--c-gold); transform: scaleX(0); transform-origin: 0 50%; }
+
+/* ---------- Cursor spotlight ---------- */
+/* 고정 크기 원을 transform으로만 옮긴다(화면 전체 다시 그리기 방지) */
+.spotlight {
+  position: fixed; top: 0; left: 0; width: 1200px; height: 1200px; margin: -600px 0 0 -600px;
+  z-index: var(--z-overlay); pointer-events: none; will-change: transform;
+  background: radial-gradient(closest-side, rgba(43, 104, 174, 0.08), transparent 80%);
+  opacity: 0; transition: opacity var(--dur-slow) var(--ease-out);
+}
+html.has-pointer .spotlight { opacity: 1; }
+
+/* ---------- Hero background layer ---------- */
+.hero-bg {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100vh; height: 100svh;
+  z-index: var(--z-bg); overflow: hidden;
+}
+
+/* ---------- Layout ---------- */
+.layout {
+  position: relative; z-index: var(--z-content);
+  display: grid; grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
+  column-gap: clamp(2rem, 6vw, 6rem);
+  max-width: 1360px; margin: 0 auto; padding: 0 var(--page-pad);
+}
+.content { min-width: 0; }
+
+/* ---------- Sidebar ---------- */
+.sidebar {
+  position: sticky; top: 0; height: 100vh; height: 100svh;
+  display: flex; flex-direction: column; justify-content: space-between;
+  padding: var(--sp-24) 0 var(--sp-16);
+  z-index: var(--z-sidebar);
+}
+.sidebar__identity { transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out); }
+/* 히어로 구간에서는 큰 이름이 화면에 있으므로 사이드바 이름을 숨긴다 */
+.js.at-hero:not(.force-visible) .sidebar__identity { opacity: 0; transform: translateY(-10px); pointer-events: none; }
+
+.sidebar__name {
+  display: inline-block; font-family: var(--f-display); font-weight: 500;
+  font-size: clamp(2.25rem, 3.4vw, 3.25rem); line-height: var(--lh-tight); letter-spacing: var(--ls-display);
+}
+.sidebar__roles { margin-top: var(--sp-3); font-size: var(--fs-sm); font-weight: 500; color: var(--c-text); }
+.sidebar__roles span + span::before { content: "·"; margin: 0 0.5em; color: var(--c-gold); }
+.sidebar__tagline { margin-top: var(--sp-4); max-width: 28ch; font-size: var(--fs-sm); color: var(--c-text-muted); }
+
+.sidebar__nav { margin: var(--sp-12) 0; }
+.sidebar__nav a {
+  display: inline-flex; align-items: center; gap: var(--sp-4);
+  padding: var(--sp-3) 0; color: var(--c-text-dim);
+  font-size: var(--fs-xs); font-weight: 600; letter-spacing: var(--ls-eyebrow); text-transform: uppercase;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.sidebar__nav .nav__num { font-family: var(--f-mono); font-weight: 400; letter-spacing: 0; opacity: 0.7; }
+.sidebar__nav .nav__line {
+  width: 32px; height: 1px; background: currentColor;
+  transition: width var(--dur-base) var(--ease-out), background-color var(--dur-fast);
+}
+.sidebar__nav a:hover, .sidebar__nav a:focus-visible { color: var(--c-text); }
+.sidebar__nav a:hover .nav__line, .sidebar__nav a:focus-visible .nav__line { width: 64px; }
+.sidebar__nav a.is-active { color: var(--c-gold); }
+.sidebar__nav a.is-active .nav__line { width: 64px; }
+
+.sidebar__social { display: flex; align-items: center; gap: var(--sp-6); }
+.sidebar__social a {
+  display: inline-flex; align-items: center; gap: var(--sp-2); min-height: 44px;
+  color: var(--c-text-muted); transition: color var(--dur-fast), transform var(--dur-fast) var(--ease-out);
+}
+.sidebar__social a:hover, .sidebar__social a:focus-visible { color: var(--c-gold); transform: translateY(-2px); }
+.sidebar__social svg { width: 22px; height: 22px; stroke-width: 1.5; }
+
+/* ---------- Topbar (mobile) ---------- */
+.topbar { display: none; }
+
+@media (max-width: 768px) {
+  .layout { display: block; }
+  .sidebar { display: none; }
+  .spotlight { display: none; }
+
+  .topbar {
+    position: fixed; inset: 0 0 auto 0; height: var(--topbar-h); z-index: var(--z-topbar);
+    display: flex; align-items: center; gap: var(--sp-4);
+    padding: 0 0 0 var(--page-pad);
+    background: rgba(244, 248, 252, 0.84);
+    -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--c-line);
+  }
+  .topbar__name { flex: none; font-family: var(--f-display); font-size: 1.25rem; font-weight: 500; letter-spacing: var(--ls-display); }
+  .topbar__nav {
+    flex: 1; min-width: 0; height: 100%;
+    display: flex; align-items: center; gap: var(--sp-1);
+    overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+    padding-right: var(--page-pad);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 16px, #000 calc(100% - 24px), transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 16px, #000 calc(100% - 24px), transparent);
+  }
+  .topbar__nav::-webkit-scrollbar { display: none; }
+  .topbar__nav a {
+    flex: none; display: inline-flex; align-items: center; height: 44px; padding: 0 var(--sp-3);
+    color: var(--c-text-muted); font-size: var(--fs-xs); font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+    white-space: nowrap; transition: color var(--dur-fast);
+  }
+  .topbar__nav a.is-active { color: var(--c-gold); }
+  .progress { top: var(--topbar-h); }
+}

@@ -1,0 +1,89 @@
+/* ============================================================
+   tokens.css — "Winter Editorial" 디자인 토큰 (2026-11-16 회장님 요청으로 흰색·푸른색 겨울 톤으로 전환)
+   ※ 변수 이름(--c-gold / --c-teal / --c-terra)은 예전 팔레트의 이름을 그대로 둔 것이고, 역할(주·보조·강조 포인트)만 뜻한다.
+   공통 토큰 변경은 S0 / S6 에서만. 섹션 CSS는 var()만 사용할 것.
+   ============================================================ */
+:root {
+  /* --- Color: surface --- */
+  --c-bg: #F4F8FC;            /* 페이지 배경 (눈빛 흰색) */
+  --c-bg-deep: #E4EDF7;       /* 한 단계 짙은 바탕 */
+  --c-card: #FFFFFF;          /* 카드 */
+  --c-card-hover: #EDF4FB;    /* 카드 호버 */
+  --c-line: rgba(30, 58, 95, 0.13);   /* 헤어라인 */
+  --c-line-strong: rgba(30, 58, 95, 0.28);
+  --c-ink: #14263D;           /* 사진 위 어두운 면(폰 테두리, 버튼) */
+  --c-on-photo: #FFFFFF;      /* 사진·어두운 면 위 글자 */
+
+  /* --- Color: text --- */
+  --c-text: #14263D;          /* 본문 (짙은 남색) */
+  --c-text-muted: #465C74;    /* 보조 */
+  --c-text-dim: #55687E;      /* 캡션·날짜 (대비 5.4:1 on bg, 4.9:1 on bg-deep) */
+
+  /* --- Color: accent --- */
+  --c-gold: #2B68AE;          /* 주 포인트(겨울 파랑): 링크·활성 내비·슬로건 */
+  --c-gold-soft: rgba(43, 104, 174, 0.11);
+  --c-teal: #14677F;          /* 보조 포인트(얼음빛 청록): NOW 배지·태그 */
+  --c-teal-soft: rgba(20, 103, 127, 0.11);
+  --c-terra: #5560B0;         /* 강조 포인트(남보라): 하이라이트·"확인 필요" 표시 */
+  --c-terra-soft: rgba(85, 96, 176, 0.12);
+
+  /* --- Gradient --- */
+  --g-hero-overlay: linear-gradient(180deg,
+      rgba(236, 244, 252, 0.42) 0%,
+      rgba(236, 244, 252, 0.24) 35%,
+      rgba(244, 248, 252, 0.86) 78%,
+      #F4F8FC 100%);
+
+  /* --- Typography: family --- */
+  --f-display: "Cormorant Garamond", "Noto Serif KR", Georgia, serif;   /* 2026-11-13 확정 */
+  --f-body: "Pretendard Variable", Pretendard, Inter, -apple-system, "Segoe UI",
+            "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --f-script: "Allura", cursive;   /* 슬로건 전용 (2026-11-13 확정) */
+  --f-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+
+  /* --- Typography: scale (fluid) --- */
+  --fs-hero: clamp(3.25rem, 9vw, 8.5rem);      /* 키네틱 이름 */
+  --fs-h1: clamp(2.25rem, 5vw, 4rem);
+  --fs-h2: clamp(1.5rem, 2.6vw, 2.25rem);
+  --fs-h3: 1.25rem;
+  --fs-body: 1rem;
+  --fs-sm: 0.875rem;
+  --fs-xs: 0.75rem;                             /* 태그·날짜·eyebrow */
+  --fs-script-sm: clamp(2rem, 4vw, 3.25rem);    /* 히어로 하단 슬로건 */
+
+  --lh-tight: 1.05;
+  --lh-snug: 1.3;
+  --lh-body: 1.7;
+  --ls-eyebrow: 0.18em;       /* 대문자 eyebrow */
+  --ls-display: -0.02em;
+
+  /* --- Space (4px base) --- */
+  --sp-1: 0.25rem;  --sp-2: 0.5rem;  --sp-3: 0.75rem; --sp-4: 1rem;
+  --sp-6: 1.5rem;   --sp-8: 2rem;    --sp-12: 3rem;   --sp-16: 4rem;
+  --sp-24: 6rem;    --sp-32: 8rem;
+  --section-gap: clamp(6rem, 12vw, 10rem);
+
+  /* --- Layout --- */
+  --sidebar-w: clamp(280px, 30vw, 420px);
+  --content-max: 760px;
+  --page-pad: clamp(1.25rem, 5vw, 6rem);
+  --topbar-h: 56px;           /* 모바일 상단바 */
+  --bp-mobile: 768px;         /* 참고용: 미디어쿼리는 (max-width: 768px) */
+
+  /* --- Radius / border / shadow --- */
+  --r-sm: 6px;  --r-md: 12px;  --r-lg: 20px;  --r-pill: 999px;
+  --shadow-card: 0 1px 0 rgba(255, 255, 255, 0.9) inset, 0 18px 40px -26px rgba(30, 58, 95, 0.32);
+  --shadow-phone: 0 40px 80px -32px rgba(30, 58, 95, 0.5), 0 0 0 1px var(--c-line-strong);
+
+  /* --- Motion --- */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 0.2s;  --dur-base: 0.45s;  --dur-slow: 0.9s;
+
+  /* --- z-index --- */
+  --z-bg: 0;  --z-content: 10;  --z-sidebar: 20;  --z-topbar: 30;  --z-overlay: 40;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur-fast: 0s; --dur-base: 0s; --dur-slow: 0s; }
+}
